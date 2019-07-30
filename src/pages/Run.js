@@ -14,7 +14,6 @@ const Root = styled.div`
 const Header = styled.div`
   display: flex;
   flex: 0.2;
-  border: 1px solid red;
 `;
 
 const Content = styled.div`
@@ -32,11 +31,9 @@ const GridContainer = styled.div`
 const Footer = styled.div`
   display: flex;
   flex: 0.2;
-  border: 1px solid blue;
 `;
 
 const GridItem = styled.div`
-  border: 1px solid green;
 `;
 
 const Run = () => {
