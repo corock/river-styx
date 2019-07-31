@@ -27,7 +27,7 @@ const ContentPanel = styled.div`
   align-items: center;
 `;
 
-class MainContainer extends Component {
+class RunContainer extends Component {
   render() {
     return (
       <GridContainer>
@@ -47,4 +47,4 @@ class MainContainer extends Component {
   }
 }
 
-export default MainContainer;
+export default RunContainer;
