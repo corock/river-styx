@@ -1,10 +1,13 @@
 import React from 'react';
 import styled from 'styled-components';
 import img from 'images/fog.jpg';
+import MainContainer from 'containers/MainContainer';
+import Typography from '../components/Typography/Typography';
 
 const Root = styled.div`
   display: flex;
   flex-direction: column;
+  flex: 1;
   width: 100vw;
   height: 100vh;
   background: url(${img}) no-repeat center center;
@@ -14,6 +17,12 @@ const Root = styled.div`
 const Header = styled.div`
   display: flex;
   flex: 0.2;
+  flex-direction: column;
+  align-items: flex-start;
+  margin: 2rem;
+  padding: 2rem;
+  font-size: 1.5rem;
+  line-height: 2.5rem;
 `;
 
 const Content = styled.div`
@@ -21,33 +30,23 @@ const Content = styled.div`
   flex: 0.6;
 `;
 
-const GridContainer = styled.div`
-  display: grid;
-  grid-template-columns: 25% auto 25%;
-  grid-gap: 1rem;
-  width: 100vw;
-`;
-
 const Footer = styled.div`
   display: flex;
   flex: 0.2;
 `;
 
-const GridItem = styled.div`
-`;
-
 const Run = () => {
   return (
     <Root>
-      <Header>Run</Header>
+      <Header>
+        <Typography>Length: 5</Typography>
+        <Typography>Weight: 10</Typography>
+        <Typography>Weights: 3, 7, 3, 2, 5, 8</Typography>
+      </Header>
       <Content>
-        <GridContainer>
-          <GridItem>1</GridItem>
-          <GridItem>2</GridItem>
-          <GridItem>3</GridItem>
-        </GridContainer>
+        <MainContainer />
       </Content>
-      <Footer>실행 페이지입니다.</Footer>
+      <Footer />
     </Root>
   );
 };
