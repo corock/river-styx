@@ -1,7 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
 import img from 'images/fog.jpg';
-import MainContainer from 'containers/MainContainer';
+
+import RunContainer from 'containers/RunContainer';
 import Typography from '../components/Typography/Typography';
 
 const Root = styled.div`
@@ -44,7 +45,7 @@ const Run = () => {
         <Typography>Weights: 3, 7, 3, 2, 5, 8</Typography>
       </Header>
       <Content>
-        <MainContainer />
+        <RunContainer />
       </Content>
       <Footer />
     </Root>
