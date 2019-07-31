@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import img from 'images/river-styx.jpg';
 
+import Typography from 'components/Typography/Typography';
+
 const Root = styled.div`
   display: flex;
   flex-direction: column;
@@ -33,13 +35,9 @@ const Title = styled.div`
   margin-bottom: 4rem;
 `;
 
-const Label = styled.label`
-  text-align: right;
-`;
-
 const Input = styled.input`
   width: ${props => (props.weights ? '24rem' : '16rem')};
-  height: 3rem;
+  height: 2.5rem;
   font-size: 1.3rem;
   padding-left: 1rem;
 `;
@@ -62,19 +60,19 @@ const Home = () => {
     <Root>
       <Title>River Styx</Title>
       <Panel>
-        <Label>Length</Label>
+        <Typography align="right">Length</Typography>
         <Input />
       </Panel>
       <Panel>
-        <Label>Weight</Label>
+        <Typography align="right">Weight</Typography>
         <Input />
       </Panel>
       <Panel>
-        <Label>Weights</Label>
+        <Typography align="right">Weights</Typography>
         <Input weights />
       </Panel>
       <WrappedButton>
-        <Link to='/run'>
+        <Link to="/run">
           <Button>Start!</Button>
         </Link>
       </WrappedButton>
