@@ -22,15 +22,15 @@ export const run = createAction(RUN);
 
 const initialState = {
   lengths: [],
-  weight: '',
-  weights: []
+  maxWeight: '',
+  weights: [],
 };
 
 /**
  * Reducers
  *
- * @lengths new Array(parseInt(action.payload.value)).fill(0)
- * Create new array, which can be iterated over
+ * @lengths Create new array, which can be iterated over
+ * @returns new Array(parseInt(action.payload.value)).fill(0)
  */
 export default handleActions(
   {
@@ -41,15 +41,14 @@ export default handleActions(
           lengths: new Array(parseInt(action.payload.value)).fill(0)
         };
       }
-      if (action.payload.name === 'weight') {
+      if (action.payload.name === 'maxWeight') {
         return {
           ...state,
-          weight: action.payload.value
+          maxWeight: action.payload.value
         };
       }
       if (action.payload.name === 'weights') {
         const splitedWeights = action.payload.value.split(' ');
-        console.log('[splitedWeights]', splitedWeights);
         return {
           ...state,
           weights: splitedWeights
@@ -61,13 +60,12 @@ export default handleActions(
       return initialState;
     },
     [RUN]: state => {
-      // console.log('[RUN]', state.lengths, ':', state.weight, ':', state.weights);
       return {
         lengths: state.lengths,
-        weight: state.weight,
+        maxWeight: state.maxWeight,
         weights: state.weights
       };
-    }
+    },
   },
   initialState
 );

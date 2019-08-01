@@ -68,9 +68,9 @@ class HomeContainer extends Component {
           <Typography align="right">Weight</Typography>
           <NumberField
             type="number"
-            name="weight"
+            name="maxWeight"
             placeholder="최대 무게를 입력하세요"
-            onChange={this.handleChangeInputValue('weight')}
+            onChange={this.handleChangeInputValue('maxWeight')}
           />
         </Panel>
         <Panel>
@@ -96,7 +96,7 @@ class HomeContainer extends Component {
 export default connect(
   state => ({
     lengths: state.lengths,
-    weight: state.weight,
+    maxWeight: state.maxWeight,
     weights: state.weights
   }),
   dispatch => ({

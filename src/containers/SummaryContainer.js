@@ -7,12 +7,12 @@ import * as BridgeActions from 'redux/modules/bridge';
 
 class SummaryConatiner extends Component {
   render() {
-    const { lengths, weight, weights } = this.props;
+    const { lengths, maxWeight, weights } = this.props;
 
     return (
       <>
         <Typography>Length: {lengths.length}</Typography>
-        <Typography>Weight: {weight}</Typography>
+        <Typography>Weight: {maxWeight}</Typography>
         <Typography>Weights: {weights + ' '}</Typography>
       </>
     );
@@ -22,7 +22,7 @@ class SummaryConatiner extends Component {
 export default connect(
   state => ({
     lengths: state.bridge.lengths,
-    weight: state.bridge.weight,
+    maxWeight: state.bridge.maxWeight,
     weights: state.bridge.weights
   }),
   dispatch => ({
