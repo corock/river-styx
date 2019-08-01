@@ -8,17 +8,8 @@ const Img = styled.img`
   margin: 8px;
 `;
 
-const Ghost = () => {
-  return (
-    <>
-      <Img src={ghost} alt="" />
-      <Img src={ghost} alt="" />
-      <Img src={ghost} alt="" />
-      <Img src={ghost} alt="" />
-      <Img src={ghost} alt="" />
-      <Img src={ghost} alt="" />
-    </>
-  );
+const Ghost = isCrossed => {
+  return <Img src={ghost} alt="" />;
 };
 
 export default Ghost;
