@@ -3,7 +3,6 @@ import styled from 'styled-components';
 import ghost from 'images/ic-ghost.png';
 
 const Div = styled.div`
-  // border: 1px solid red;
   width: 64px;
   height: 64px;
   background: linear-gradient(45deg, gray, white);
@@ -11,6 +10,7 @@ const Div = styled.div`
   background-size: cover;
   opacity: 0.7;
   border-radius: 10px;
+  margin: 0.5rem;
 `;
 
 const Bridge = () => {

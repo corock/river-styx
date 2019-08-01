@@ -2,8 +2,8 @@ import React from 'react';
 import styled from 'styled-components';
 import img from 'images/fog.jpg';
 
+import SummaryConatiner from 'containers/SummaryContainer';
 import RunContainer from 'containers/RunContainer';
-import Typography from '../components/Typography/Typography';
 
 const Root = styled.div`
   display: flex;
@@ -20,8 +20,8 @@ const Header = styled.div`
   flex: 0.2;
   flex-direction: column;
   align-items: flex-start;
-  margin: 2rem;
-  padding: 2rem;
+  margin: 1rem;
+  padding: 1rem;
   font-size: 1.5rem;
   line-height: 2.5rem;
 `;
@@ -40,9 +40,7 @@ const Run = () => {
   return (
     <Root>
       <Header>
-        <Typography>Length: 5</Typography>
-        <Typography>Weight: 10</Typography>
-        <Typography>Weights: 3, 7, 3, 2, 5, 8</Typography>
+        <SummaryConatiner />
       </Header>
       <Content>
         <RunContainer />

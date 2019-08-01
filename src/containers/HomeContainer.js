@@ -7,7 +7,7 @@ import Typography from 'components/Typography';
 
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import * as BridgeActions from 'redux/modules/bridge';
+import * as bridgeActions from 'redux/modules/bridge';
 
 const Panel = styled.div`
   display: grid;
@@ -41,7 +41,16 @@ class HomeContainer extends Component {
     const { BridgeActions } = this.props;
     const { value } = e.target;
 
-    BridgeActions.changeInput({ name, value });
+    BridgeActions.changeInputToState({ name, value });
+  };
+
+  /**
+   * @function handleSubmit
+   * Start! 버튼을 클릭하면 NumberField 컴포넌트의 상태 값을 초기화합니다.
+   */
+  handleSubmit = () => {
+    const { BridgeActions } = this.props;
+    BridgeActions.run();
   };
 
   render() {
@@ -52,16 +61,16 @@ class HomeContainer extends Component {
           <NumberField
             type="number"
             placeholder="다리 수를 입력하세요(최대 10개)"
-            onChange={this.handleChangeInputValue('length')}
+            onChange={this.handleChangeInputValue('lengths')}
           />
         </Panel>
         <Panel>
           <Typography align="right">Weight</Typography>
           <NumberField
             type="number"
-            name="weight"
+            name="maxWeight"
             placeholder="최대 무게를 입력하세요"
-            onChange={this.handleChangeInputValue('weight')}
+            onChange={this.handleChangeInputValue('maxWeight')}
           />
         </Panel>
         <Panel>
@@ -69,14 +78,14 @@ class HomeContainer extends Component {
           <NumberField
             type="text"
             name="weights"
-            placeholder="망령자들의 무게를 입력하세요(공백으로 구분)"
+            placeholder="망령자들의 무게를 입력하세요(공백으로 구분, 최대 16마리)"
             size="large"
             onChange={this.handleChangeInputValue('weights')}
           />
         </Panel>
         <ButtonWrapper>
           <Link to="/run">
-            <Button>Start!</Button>
+            <Button onClick={this.handleSubmit}>Start!</Button>
           </Link>
         </ButtonWrapper>
       </>
@@ -84,12 +93,13 @@ class HomeContainer extends Component {
   }
 }
 
-// export default HomeContainer;
 export default connect(
   state => ({
-    // form: state.auth.getIn([])
+    lengths: state.lengths,
+    maxWeight: state.maxWeight,
+    weights: state.weights
   }),
   dispatch => ({
-    BridgeActions: bindActionCreators(BridgeActions, dispatch)
+    BridgeActions: bindActionCreators(bridgeActions, dispatch)
   })
 )(HomeContainer);
