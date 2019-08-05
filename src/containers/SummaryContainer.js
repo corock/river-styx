@@ -1,11 +1,11 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import Typography from 'components/Typography';
 
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as BridgeActions from 'redux/modules/bridge';
 
-class SummaryConatiner extends Component {
+class SummaryConatiner extends PureComponent {
   render() {
     const { lengths, maxWeight, weights } = this.props;
 
