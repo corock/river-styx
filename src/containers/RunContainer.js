@@ -1,4 +1,5 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
 import { connect } from 'react-redux';
@@ -38,20 +39,71 @@ const BridgeWrapper = styled.div`
   flex-direction: row;
 `;
 
-class RunContainer extends Component {
+class RunContainer extends PureComponent {
   state = {
-    time: 0
+    time: 0,
+    weightEntries: this.props.weights,
+    passingWeights: new Array(parseInt(this.props.lengths.length)).fill(0),
+    passedWeights: [],
+    totalWeight: 0
   };
 
+  crossing = entry => {
+    // debugger;
+    const { totalWeight, passingWeights, weightEntries } = this.state;
+    const { weights } = this.props;
+
+    if (entry !== 0) {
+
+      this.setState({
+        totalWeight: totalWeight + parseInt(entry),
+        weightEntries: weightEntries.slice(1, this.state.weightEntries.length),
+        passingWeights: this.state.weightEntries.splice(0, 1, this.state.weightEntries[0]),
+        time: this.state.time + 1,
+      });
+    }
+    // if (this.state.passingWeights[weights.length] !== 0) {
+    //   console.log('hi');
+    // }
+    // this.setState({
+    //   passingWeights: this.state.passingWeights.slice(1, passingWeights.length),
+    //   passedWeights: this.state.passedWeights.concat(this.state.passingWeights[weights.length]),
+    // });
+  };
+
+  toss = (entry, action) => {
+    console.log('[toss] entry ', entry, ':', action);
+    if (entry !== 0) {
+      this.crossing(entry);
+    } else {
+      this.crossing(0);
+    }
+  };
+
+  isNotExceeded = () => {
+    const { maxWeight } = this.props;
+    const { totalWeight } = this.state;
+    console.log(typeof this.state.weightEntries);
+    if (totalWeight <= maxWeight) {
+      this.toss(this.state.weightEntries[0], 'TO_BRIDGE');
+    } else {
+      this.toss(0, 'TO_BRIDGE');
+    }
+  };
+
+  /**
+   * 초과하면 자르고 아니면 그대로
+   */
   handleTimer = () => {
-    this.setState({
-      time: this.state.time + 1
-    });
+    const { time, weightEntries } = this.state;
+
+    console.log('[weightEntries]', weightEntries);
+    this.isNotExceeded();
   };
 
-  componentDidMount = (isAllPassed) => {
+  componentDidMount = isAllPassed => {
     setInterval(this.handleTimer, 1000);
-    if (isAllPassed) {
+    if (this.state.weightEntries.length === 0) {
       console.log('Done!');
       clearInterval(this);
     }
@@ -59,56 +111,44 @@ class RunContainer extends Component {
 
   render() {
     const { lengths, weights } = this.props;
-    console.log('[render] RunContainer');
+    const { weightEntries, passingWeights, passedWeights } = this.state;
+    console.log('[render]', weightEntries);
     return (
       <GridContainer>
         <SidePanel left>
-          <Ghost />
-          <Ghost />
-          <Ghost />
-          <Ghost />
-          <Ghost />
-          <Ghost />
-          <Ghost />
-          <Ghost />
-          <Ghost />
-          <Ghost />
-          {/* {weights.map((v, i) => {
-            return <Ghost key={i} />;
-          })} */}
+          {weightEntries.map((v, i) => {
+            return <Ghost key={v + i} />;
+          })}
         </SidePanel>
         <ContentPanel>
           <Typography size="large">Time: {this.state.time}</Typography>
           <BridgeWrapper>
-            {lengths.map((v, i) => {
+            {passingWeights.map((v, i) => {
               return <Bridge key={v + i} />;
             })}
           </BridgeWrapper>
           <Typography size="large">Weight: 3</Typography>
         </ContentPanel>
         <SidePanel right>
-          {/* {weights.map((v, i) => {
-            return <Ghost key={i} />;
-          })} */}
-          <Ghost />
-          <Ghost />
-          <Ghost />
-          <Ghost />
-          <Ghost />
-          <Ghost />
-          <Ghost />
-          <Ghost />
-          <Ghost />
-          <Ghost />
+          {passedWeights.map((v, i) => {
+            return <Ghost key={v + i} />;
+          })}
         </SidePanel>
       </GridContainer>
     );
   }
 }
 
+RunContainer.propTypes = {
+  lengths: PropTypes.array,
+  maxWeight: PropTypes.number,
+  weights: PropTypes.array
+};
+
 export default connect(
   state => ({
     lengths: state.bridge.lengths,
+    maxWeight: state.bridge.maxWeight,
     weights: state.bridge.weights
   }),
   dispatch => ({

@@ -8,9 +8,9 @@ const Input = styled.input`
   padding-left: 1rem;
 `;
 
-const NumberField = ({ type, size, placeholder, onChange }) => {
+const NumberField = ({ type, size, placeholder, onValidNumber, onRemoveChar, onChange }) => {
   return (
-    <Input type={type} min="0" size={size} placeholder={placeholder} onChange={onChange} />
+    <Input type="text" size={size} placeholder={placeholder} onkeypress={onValidNumber} onkeyup={onRemoveChar} onChange={onChange} />
   );
 };
 
