@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
@@ -32,7 +32,7 @@ const ButtonWrapper = styled.div`
   align-items: center;
 `;
 
-class HomeContainer extends Component {
+class HomeContainer extends PureComponent {
   /**
    * @function handleChangeInputValue
    * NumberField 컴포넌트의 @param name 과 입력한 @param value 을 액션에게 전달합니다.
@@ -40,7 +40,14 @@ class HomeContainer extends Component {
   handleChangeInputValue = name => e => {
     const { BridgeActions } = this.props;
     const { value } = e.target;
-
+    // if (!(name !== 'weights' || this.handleValidArray())) {
+    //   console.log('v1');
+    //   return;
+    // }
+    // if (!(this.handleValidNumber() || this.handleRemoveChar())) {
+    //   console.log('v2');
+    //   return;
+    // }
     BridgeActions.changeInputToState({ name, value });
   };
 
@@ -53,13 +60,54 @@ class HomeContainer extends Component {
     BridgeActions.run();
   };
 
+  handleValidNumber = event => {
+    console.log('hi');
+    event = event || window.event;
+    let keyID = event.which ? event.which : event.keyCode;
+    if (
+      (keyID >= 48 && keyID <= 57) ||
+      (keyID >= 96 && keyID <= 105) ||
+      keyID === 8 ||
+      keyID === 46 ||
+      keyID === 37 ||
+      keyID === 39
+      )
+      event.returnValue = true;
+      else event.returnValue = false;
+    };
+
+    handleValidArray = event => {
+      console.log('hi3');
+      event = event || window.event;
+      let keyID = event.which ? event.which : event.keyCode;
+      if (
+        (keyID >= 48 && keyID <= 57) ||
+        (keyID >= 96 && keyID <= 105) ||
+        keyID === 8 ||
+        keyID === 46 ||
+        keyID === 37 ||
+        keyID === 39 || keyID === 32
+        )
+        event.returnValue = true;
+        else event.returnValue = false;
+      };
+    
+    handleRemoveChar = (event) => {
+      console.log('hi2');
+      event = event || window.event;
+      let keyID = (event.which) ? event.which : event.keyCode;
+    if ( keyID === 8 || keyID === 46 || keyID === 37 || keyID === 39 ) 
+      event.returnValue = true;
+    else
+      event.target.value = event.target.value.replace(/[^0-9]/g, "");
+    };
+
   render() {
     return (
       <>
         <Panel>
           <Typography align="right">Length</Typography>
           <NumberField
-            type="number"
             placeholder="다리 수를 입력하세요(최대 10개)"
             onChange={this.handleChangeInputValue('lengths')}
           />
@@ -67,7 +115,6 @@ class HomeContainer extends Component {
         <Panel>
           <Typography align="right">Weight</Typography>
           <NumberField
-            type="number"
             name="maxWeight"
             placeholder="최대 무게를 입력하세요"
             onChange={this.handleChangeInputValue('maxWeight')}
@@ -76,7 +123,6 @@ class HomeContainer extends Component {
         <Panel>
           <Typography align="right">Weights</Typography>
           <NumberField
-            type="text"
             name="weights"
             placeholder="망령자들의 무게를 입력하세요(공백으로 구분, 최대 16마리)"
             size="large"

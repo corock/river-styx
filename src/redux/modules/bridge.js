@@ -23,7 +23,7 @@ export const run = createAction(RUN);
 const initialState = {
   lengths: [],
   maxWeight: '',
-  weights: [],
+  weights: []
 };
 
 /**
@@ -36,7 +36,6 @@ export default handleActions(
   {
     [CHANGE_INPUT]: (state, action) => {
       if (action.payload.name === 'lengths') {
-        console.log(action.payload.value);
         return {
           lengths: new Array(parseInt(action.payload.value)).fill(0)
         };
@@ -65,7 +64,7 @@ export default handleActions(
         maxWeight: state.maxWeight,
         weights: state.weights
       };
-    },
+    }
   },
   initialState
 );

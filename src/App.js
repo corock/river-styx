@@ -8,7 +8,7 @@ const App = ({ store }) => {
     <>
       <GlobalStyles />
       <Route exact path="/" component={Home} />
-      <Route path="/run" component={Run} />
+      <Route exact path="/run" component={Run} />
     </>
   );
 };
