@@ -71,36 +71,36 @@ class HomeContainer extends PureComponent {
       keyID === 46 ||
       keyID === 37 ||
       keyID === 39
-      )
+    )
       event.returnValue = true;
-      else event.returnValue = false;
-    };
+    else event.returnValue = false;
+  };
 
-    handleValidArray = event => {
-      console.log('hi3');
-      event = event || window.event;
-      let keyID = event.which ? event.which : event.keyCode;
-      if (
-        (keyID >= 48 && keyID <= 57) ||
-        (keyID >= 96 && keyID <= 105) ||
-        keyID === 8 ||
-        keyID === 46 ||
-        keyID === 37 ||
-        keyID === 39 || keyID === 32
-        )
-        event.returnValue = true;
-        else event.returnValue = false;
-      };
-    
-    handleRemoveChar = (event) => {
-      console.log('hi2');
-      event = event || window.event;
-      let keyID = (event.which) ? event.which : event.keyCode;
-    if ( keyID === 8 || keyID === 46 || keyID === 37 || keyID === 39 ) 
+  handleValidArray = event => {
+    console.log('hi3');
+    event = event || window.event;
+    let keyID = event.which ? event.which : event.keyCode;
+    if (
+      (keyID >= 48 && keyID <= 57) ||
+      (keyID >= 96 && keyID <= 105) ||
+      keyID === 8 ||
+      keyID === 46 ||
+      keyID === 37 ||
+      keyID === 39 ||
+      keyID === 32
+    )
       event.returnValue = true;
-    else
-      event.target.value = event.target.value.replace(/[^0-9]/g, "");
-    };
+    else event.returnValue = false;
+  };
+
+  handleRemoveChar = event => {
+    console.log('hi2');
+    event = event || window.event;
+    let keyID = event.which ? event.which : event.keyCode;
+    if (keyID === 8 || keyID === 46 || keyID === 37 || keyID === 39)
+      event.returnValue = true;
+    else event.target.value = event.target.value.replace(/[^0-9]/g, '');
+  };
 
   render() {
     return (

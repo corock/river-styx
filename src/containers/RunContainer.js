@@ -49,30 +49,39 @@ class RunContainer extends PureComponent {
   };
 
   crossing = entry => {
-    // debugger;
-    const { totalWeight, passingWeights, weightEntries } = this.state;
-    const { weights } = this.props;
+    const { time, weightEntries, totalWeight, passingWeights } = this.state;
+    const { maxWeight, weights } = this.props;
+
+    // 현재 다리의 총 무게가 최대 무게량보다 클 경우 시간만 계산
+    if (totalWeight > maxWeight) {
+      this.setState({
+        time: time + 1
+      });
+      return;
+    }
 
     if (entry !== 0) {
+      const { weightEntries, passingWeights } = this.state;
+      const { weights } = this.props;
 
       this.setState({
         totalWeight: totalWeight + parseInt(entry),
-        weightEntries: weightEntries.slice(1, this.state.weightEntries.length),
-        passingWeights: this.state.weightEntries.splice(0, 1, this.state.weightEntries[0]),
-        time: this.state.time + 1,
+        weightEntries: weightEntries.slice(1, weightEntries.length),
+        passingWeights: weightEntries.splice(0, 1, weightEntries[0])
       });
     }
-    // if (this.state.passingWeights[weights.length] !== 0) {
-    //   console.log('hi');
-    // }
-    // this.setState({
-    //   passingWeights: this.state.passingWeights.slice(1, passingWeights.length),
-    //   passedWeights: this.state.passedWeights.concat(this.state.passingWeights[weights.length]),
-    // });
+
+    // 마지막 다리인 지 체크
+    if (passingWeights[weights.length] !== 0) {
+      this.setState({
+        totalWeight: totalWeight - passingWeights[weights.length],
+        passingWeights: passingWeights.slice(1, passingWeights.length),
+        passedWeights: passingWeights.splice(0, 1, passingWeights[0])
+      });
+    }
   };
 
   toss = (entry, action) => {
-    console.log('[toss] entry ', entry, ':', action);
     if (entry !== 0) {
       this.crossing(entry);
     } else {
@@ -83,7 +92,7 @@ class RunContainer extends PureComponent {
   isNotExceeded = () => {
     const { maxWeight } = this.props;
     const { totalWeight } = this.state;
-    console.log(typeof this.state.weightEntries);
+
     if (totalWeight <= maxWeight) {
       this.toss(this.state.weightEntries[0], 'TO_BRIDGE');
     } else {
@@ -95,24 +104,28 @@ class RunContainer extends PureComponent {
    * 초과하면 자르고 아니면 그대로
    */
   handleTimer = () => {
-    const { time, weightEntries } = this.state;
-
-    console.log('[weightEntries]', weightEntries);
     this.isNotExceeded();
   };
 
-  componentDidMount = isAllPassed => {
-    setInterval(this.handleTimer, 1000);
-    if (this.state.weightEntries.length === 0) {
+  componentDidMount = () => {
+    const { weightEntries, totalWeight } = this.state;
+    console.log('[componentDidMount]', weightEntries);
+    if (weightEntries.length === 0 && totalWeight === 0) {
       console.log('Done!');
       clearInterval(this);
     }
+    setInterval(this.handleTimer, 1000);
   };
 
   render() {
-    const { lengths, weights } = this.props;
-    const { weightEntries, passingWeights, passedWeights } = this.state;
-    console.log('[render]', weightEntries);
+    const {
+      time,
+      totalWeight,
+      weightEntries,
+      passingWeights,
+      passedWeights
+    } = this.state;
+
     return (
       <GridContainer>
         <SidePanel left>
@@ -121,13 +134,13 @@ class RunContainer extends PureComponent {
           })}
         </SidePanel>
         <ContentPanel>
-          <Typography size="large">Time: {this.state.time}</Typography>
+          <Typography size="large">Time: {time}</Typography>
           <BridgeWrapper>
             {passingWeights.map((v, i) => {
               return <Bridge key={v + i} />;
             })}
           </BridgeWrapper>
-          <Typography size="large">Weight: 3</Typography>
+          <Typography size="large">Weight: {totalWeight}</Typography>
         </ContentPanel>
         <SidePanel right>
           {passedWeights.map((v, i) => {
