@@ -9,6 +9,7 @@ import * as bridgeActions from 'redux/modules/bridge';
 import Ghost from 'components/Ghost';
 import Bridge from 'components/Bridge';
 import Typography from '../components/Typography/Typography';
+import { push_uniq } from 'terser';
 
 const GridContainer = styled.div`
   display: grid;
@@ -24,7 +25,6 @@ const SidePanel = styled.div`
   flex-wrap: wrap;
   align-content: ${props => (props.left ? 'flex-end' : 'flex-start')};
   justify-content: center;
-  // border: 1px solid blue;
 `;
 
 const ContentPanel = styled.div`
@@ -39,14 +39,21 @@ const BridgeWrapper = styled.div`
   flex-direction: row;
 `;
 
-class RunContainer extends PureComponent {
-  state = {
-    time: 0,
-    weightEntries: this.props.weights,
-    passingWeights: new Array(parseInt(this.props.lengths.length)).fill(0),
-    passedWeights: [],
-    totalWeight: 0
-  };
+class RunContainer extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      time: 0,
+      weightEntries: [],
+      passingWeights: new Array(parseInt(props.lengths.length)).fill(false),
+      passedWeights: [],
+      totalWeight: 0,
+  
+      isPassed: false,
+      isAllPassed: false
+    };
+  
+  }
 
   crossing = entry => {
     // debugger;
@@ -101,37 +108,55 @@ class RunContainer extends PureComponent {
     this.isNotExceeded();
   };
 
+  handlePassing = () => {
+    const { weights, BridgeActions } = this.props;
+    const { weightEntries, passingWeights, passedWeights } = this.state;
+    const element = weights.shift();
+
+    console.log('[element]', element);
+    console.log('[passingWeights]', typeof this.state.passingWeights);
+    if (element === undefined) {
+      this.setState({
+        isAllPassed: true,
+      });
+    }
+    this.setState({
+      passingWeights: this.state.passingWeights.push(element)
+    });
+  };
+
   componentDidMount = isAllPassed => {
-    setInterval(this.handleTimer, 1000);
-    if (this.state.weightEntries.length === 0) {
+    if (isAllPassed) {
+      return;
+    }
+      // setInterval(this.handlePassing, 1000);
       console.log('Done!');
       clearInterval(this);
-    }
   };
 
   render() {
     const { lengths, weights } = this.props;
-    const { weightEntries, passingWeights, passedWeights } = this.state;
-    console.log('[render]', weightEntries);
+    const { time, passingWeights, totalWeight, isPassed, isAllPassed } = this.state;
+    console.log('[weights]', passingWeights);
     return (
       <GridContainer>
         <SidePanel left>
-          {weightEntries.map((v, i) => {
-            return <Ghost key={v + i} />;
+          {weights.map((v, i) => {
+            return <Ghost isPassed={isPassed} key={i} />;
           })}
         </SidePanel>
         <ContentPanel>
-          <Typography size="large">Time: {this.state.time}</Typography>
+          <Typography size="large">Time: {time}</Typography>
           <BridgeWrapper>
             {passingWeights.map((v, i) => {
-              return <Bridge key={v + i} />;
+              return <Bridge isPassing={true} key={v + i} />;
             })}
           </BridgeWrapper>
-          <Typography size="large">Weight: 3</Typography>
+          <Typography size="large">Weight: {totalWeight}</Typography>
         </ContentPanel>
         <SidePanel right>
-          {passedWeights.map((v, i) => {
-            return <Ghost key={v + i} />;
+          {weights.map((v, i) => {
+            return <Ghost key={i} />;
           })}
         </SidePanel>
       </GridContainer>
@@ -148,10 +173,10 @@ RunContainer.propTypes = {
 export default connect(
   state => ({
     lengths: state.bridge.lengths,
-    maxWeight: state.bridge.maxWeight,
-    weights: state.bridge.weights
+    weights: state.bridge.weights,
+    passingWeights: state.bridge.passingWeights
   }),
   dispatch => ({
     BridgeActions: bindActionCreators(bridgeActions, dispatch)
   })
-)(RunContainer);
+)(React.memo(RunContainer));
